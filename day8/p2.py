@@ -1,6 +1,6 @@
 import math
 
-with open("2023d8i.txt") as file:
+with open("input.txt") as file:
     lines = file.read().split("\n")
     lines = [l for l in lines if l]
 
