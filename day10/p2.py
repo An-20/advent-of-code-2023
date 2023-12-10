@@ -1,3 +1,44 @@
+"""
+Why does this work?
+In particular, this line:
+`if (rx, ry) in dists and lines[ry][rx] in "|7F"`.
+
+Firstly, this solution uses the fact that a ray cast from
+a point inside a polygon will intersect an odd number of times
+with an edge, while a ray cast from a point outside a polygon
+will intersect an even number of times.
+https://en.wikipedia.org/wiki/Point_in_polygon
+
+Why do we only need to check for these characters: |7F
+when extending a ray to the east / positive x axis?
+
+One way to look at it is to see that the "corner" pipes
+aren't only corners, but also have edges. This is best seen
+when drawing out each pipe on a 5x5 grid:
+
+|       -       L       J       F       7
+..|..   .....   ..|..   ..|..   .....   .....
+..|..   .....   ..|..   ..|..   .....   .....
+..|..   -----   ..L--   --J..   ..F--   --7..
+..|..   .....   .....   .....   ..|..   ..|..
+..|..   .....   .....   .....   ..|..   ..|..
+
+Now if we imagine drawing a ray through the 2nd-from-bottomth
+row of each 3x3 grid, we see that if we have pipes arranged in a L7
+arrangement, then really the ray would only pass through once.
+
+       ..|.......
+       ..|.......
+       ..L----7..
+RAY -> .......|..
+       .......|..
+
+Thus, if we always draw a ray along that axis (that is 4/5th
+of the way down each grid cell), then we will only ever encounter
+|s, 7s, and Fs.
+"""
+
+
 with open("input.txt") as file:
     lines = file.read().split("\n")
     lines = [l for l in lines if l]
@@ -74,7 +115,7 @@ for y in range(ydim):
         intersection_count = 0
         while rx < xdim:
             rx += 1
-            if (rx, ry) in dists and lines[ry][rx] in "S|7F":
+            if (rx, ry) in dists and lines[ry][rx] in "|7F":
                 intersection_count += 1
         if intersection_count % 2 == 1:
             vis[y][x] = "I"
